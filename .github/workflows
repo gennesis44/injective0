@@ -1,1 +1,25 @@
 
+name: hbar
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+permissions:
+  contents: read
+jobs:
+  destructor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install ccxt pandas
+      - name: DESTRUCTOR HBAR (1 ciclo por run, modo control)
+        run: python bot_hbar.py
+        env:
+          OKX_API_KEY: ${{ secrets.OKX_API_KEY }}
+          OKX_SECRET_KEY: ${{ secrets.OKX_SECRET_KEY }}
+          OKX_PASSWORD: ${{ secrets.OKX_PASSWORD }}
+          SINGLE_CYCLE: "1"
+          TEST_MODE: "1"
